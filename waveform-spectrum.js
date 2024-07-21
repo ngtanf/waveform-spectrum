@@ -35,7 +35,7 @@ var sp_padding_bottom = 25;
 var sp_fftSize = 2048;  // fftのサイズ ※変更可能
 var sp_fs;              // 周波数分解能(Frequency resolution)
 var sp_440Hz;           // 440Hzの横幅
-var sp_16384Hz_fftSize;  // 8192Hzのfftの最大サイズ
+var sp_16384Hz_fftSize;  // 16384Hzのfftの最大サイズ
 
 window.onload = function(){
   canvas1 = document.getElementById('canvas1');
@@ -149,8 +149,8 @@ function draw(){
     ctx2.lineWidth = 2;  
     var shl = 1;
     for(var i=0; i < 5; i++) {
-      ctx2.moveTo(sp_440Hz * shl * (sp_width/sp_8192Hz_fftSize) + sp_padding_left, sp_padding_top);
-      ctx2.lineTo(sp_440Hz * shl * (sp_width/sp_8192Hz_fftSize) + sp_padding_left, sp_height + sp_padding_top);      
+      ctx2.moveTo(sp_440Hz * shl * (sp_width/sp_16384Hz_fftSize) + sp_padding_left, sp_padding_top);
+      ctx2.lineTo(sp_440Hz * shl * (sp_width/sp_16384Hz_fftSize) + sp_padding_left, sp_height + sp_padding_top);      
       shl = shl << 1;
     }           
   ctx2.stroke();
@@ -165,13 +165,13 @@ function draw(){
   // --------------------
   //  強度
   // --------------------
-  // 0 ～ 8192Hzまでの強度
+  // 0 ～ 16384Hzまでの強度
   ctx2.lineWidth = 2;      
   ctx2.strokeStyle = 'rgb(0, 0, 255)';
   ctx2.beginPath();
     ctx2.moveTo(sp_padding_left,  255 - data2[0] + sp_padding_top);
-    for(var i=0; i < sp_8192Hz_fftSize; i++) {
-       ctx2.lineTo((i* (sp_width/sp_8192Hz_fftSize)) + sp_padding_left, 255 - data2[i] + sp_padding_top);                    
+    for(var i=0; i < sp_16384Hz_fftSize; i++) {
+       ctx2.lineTo((i* (sp_width/sp_16384Hz_fftSize)) + sp_padding_left, 255 - data2[i] + sp_padding_top);                    
     }
   ctx2.stroke();   
 
@@ -199,7 +199,7 @@ function draw(){
   var shl = 1;
   for(var i=0; i < 5; i++) {
     ctx2.fillText((shl* 440) + 'Hz',
-                   sp_440Hz * shl * (sp_width/sp_8192Hz_fftSize) + sp_padding_left - 17,
+                   sp_440Hz * shl * (sp_width/sp_16384Hz_fftSize) + sp_padding_left - 17,
                    sp_height +  sp_padding_top +15);            
     shl = shl << 1;
   }
@@ -225,8 +225,8 @@ function voice_processing(output){
   // ※sampleRateはコンピュータによって異なる。仮に48,000Hzの場合は48000/2048 = 23.4375
   sp_fs = audioCtx.sampleRate / analyserNode_sp.fftSize;
   
-  // 周波数スペクトルの0Hz ～ 8192Hzのfftの最大サイズ
-  sp_8192Hz_fftSize = Math.ceil(8192 / sp_fs);    
+  // 周波数スペクトルの0Hz ～ 16384Hzのfftの最大サイズ
+  sp_16384Hz_fftSize = Math.ceil(16384 / sp_fs);    
 
   // 周波数スペクトルの440Hzのグリッド横幅
   sp_440Hz = 440 / sp_fs;
@@ -235,7 +235,7 @@ function voice_processing(output){
   analyserNode_sp.minDecibels = -140;  // デフォルト -100     
      
   data1 = new Uint8Array(wa_width);
-  data2 = new Uint8Array(sp_8192Hz_fftSize);    
+  data2 = new Uint8Array(sp_16384Hz_fftSize);    
   
   // オーディオノードの設定
   audioSourceNode.connect(analyserNode_sp);    
