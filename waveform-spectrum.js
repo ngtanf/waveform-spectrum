@@ -35,7 +35,7 @@ var sp_padding_bottom = 25;
 var sp_fftSize = 2048;  // fftのサイズ ※変更可能
 var sp_fs;              // 周波数分解能(Frequency resolution)
 var sp_440Hz;           // 440Hzの横幅
-var sp_8192Hz_fftSize;  // 8192Hzのfftの最大サイズ
+var sp_16384Hz_fftSize;  // 8192Hzのfftの最大サイズ
 
 window.onload = function(){
   canvas1 = document.getElementById('canvas1');
